@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function moduleInfo() {
+    echo
+    echo "MODULE: configuration"
+    echo
+
+    for file in `ls ${DIR}/.lib/configuration/`; do
+        if [ -e "${DIR}/.lib/configuration/$file/command" ]; then
+            source "${DIR}/.lib/configuration/$file/command"
+            commandInfo
+        fi
+    done
+}
+

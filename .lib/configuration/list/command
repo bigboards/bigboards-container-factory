@@ -1,0 +1,16 @@
+#!/bin/bash
+
+function moduleExecute() {
+	[ ! -e "$DIR/configurations" ] && \
+		echo "No configurations available yet. Create one with $0 configuration create <configuration-name>" && \
+		return 0
+
+	ls "$DIR/configurations"
+}
+
+function commandInfo() {
+    	echo "      list            List the currently available configurations within the factory. "
+	echo
+	echo
+}
+

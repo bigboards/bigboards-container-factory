@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function moduleExecute() {
+	[ -z "$3" ] && echo "No configuration name has been provided!" && exit 1
+	[ ! -e "$DIR/configurations/$3" ] && echo "The given configuration does not exist" && exit 1
+
+	rm -rf "$DIR/configurations/$3"	
+}
+
+function commandInfo() {
+    	echo "      remove          Remove the configuration with the given name from the factory. "
+	echo
+	echo "                      ARGUMENTS:"
+	echo "                      configuration_name	the name of the configuration to remove"
+	echo
+}
+

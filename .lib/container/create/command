@@ -1,0 +1,56 @@
+#!/bin/bash
+
+function moduleExecute() {
+	[ -z "$3" ] && echo "No container name has been provided!" && exit 1
+	[ -e "$DIR/containers/$3" ] && echo "A container with that name already exists" && exit 1	
+
+	echo "    Creating the container directory"
+        mkdir -p "$DIR/containers/$3/docker_files"
+
+        echo "    Creating the Dockerfile"
+        cat <<EOF > "$DIR/containers/$3/Dockerfile"
+# Import the bigboards multi-arch base image
+FROM bigboards-base-__arch__
+
+# Install additional packages
+#RUN apt-get update && apt-get install -f ...
+
+# Add the executable file
+ADD docker_files/run.sh /apps/run.sh
+RUN chmod a+x /apps/run.sh
+
+# Delcare volumes
+#RUN mkdir /etc/...
+#VOLUME /etc/...
+
+# Expose ports
+#EXPOSE ....
+
+CMD ["/apps/run.sh"]
+EOF
+
+	echo "    Creating the application run file"
+        cat <<EOF > "$DIR/containers/$3/docker_files/run.sh"
+#!/bin/bash
+CONFIG_FILE=/etc/...
+
+# -- Load the configuration file if it exists
+if [ -e "\$CONFIG_FILE" ]; then
+        echo "Reading configuration from \${CONFIG_FILE}"
+        . \$CONFIG_FILE
+fi
+
+# -- Execute the command to start the daemon
+# < add your command here >
+EOF
+
+}
+
+function commandInfo() {
+    	echo "      create          Create a new container. "
+	echo
+	echo "                      ARGUMENTS:"
+	echo "                      container_name	the name of the container to create"
+	echo
+}
+

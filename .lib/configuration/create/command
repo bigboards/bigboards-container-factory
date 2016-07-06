@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function moduleExecute() {
+	[ -z "$3" ] && echo "No configuration name has been provided!" && exit 1
+        [ -e "$DIR/configurations/$3" ] && echo "A configuration with that name already exists" && exit 1
+
+	echo "    Creating the configuration directory"
+        mkdir -p "$DIR/configurations/$3/config"
+
+        cat <<EOF > "$DIR/configurations/$3/README.md"
+# $3 Tint Configuration
+This directory contains the configuration resources for the $3
+tint.
+
+Take a look at the bigboards.io website for more information: http://www.bigboards.io
+EOF
+
+}
+
+function commandInfo() {
+    	echo "      create          Create a new configuration. "
+	echo
+	echo "                      ARGUMENTS:"
+	echo "                      configuration_name	the name of the configuration to create"
+	echo
+}
+

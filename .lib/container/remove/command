@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function moduleExecute() {
+	[ -z "$3" ] && echo "No container name has been provided!" && exit 1
+	[ ! -e "$DIR/containers/$3" ] && echo "The given container does not exist" && exit 1
+
+	rm -rf "$DIR/containers/$3"	
+}
+
+function commandInfo() {
+    	echo "      remove          Remove the container with the given name from the factory. "
+	echo
+	echo "                      ARGUMENTS:"
+	echo "                      container_name	the name of the container to remove"
+	echo
+}
+

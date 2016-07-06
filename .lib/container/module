@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function moduleInfo() {
+    echo
+    echo "MODULE: container"
+    echo
+
+    for file in `ls ${DIR}/.lib/container/`; do
+        if [ -e "${DIR}/.lib/container/$file/command" ]; then
+            source "${DIR}/.lib/container/$file/command"
+            commandInfo
+        fi
+    done
+}
+

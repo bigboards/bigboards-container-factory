@@ -1,0 +1,56 @@
+#!/bin/bash
+## ######################################################################### ##
+##
+##    A Script for initializing the factory
+##
+## ######################################################################### ##
+DIR=$(dirname "$(readlink -f ${BASH_SOURCE[0]})" )
+ACTION=${1}
+OPERATION=${2}
+
+MOD_PATH="$DIR/.lib"
+MOD_FOUND="no"
+for OPT in $@; do
+    if [ "$OPT" = "help" ]; then
+        MOD_FOUND="yes"
+        if [ -e "$MOD_PATH/module" ]; then
+            source "$MOD_PATH/module"
+            moduleInfo
+        fi
+    else
+        # -- check if the directory has a module or if it is a container for other operations
+        if [ -e "$MOD_PATH/$OPT/command" ]; then
+            MOD_FOUND="yes"
+            source "$MOD_PATH/$OPT/command"
+            moduleExecute $@
+
+            RET=$?
+            if [[ $RET != 0 ]]; then
+                commandInfo
+                exit $RET
+            fi
+        else
+            MOD_PATH="$MOD_PATH/$OPT"
+        fi
+    fi
+done
+
+if [ "$MOD_FOUND" = "no" ]; then
+	if [ -z "$1" ]; then
+		echo "No module name has been provided."
+	else
+		echo "No module could be found for $@"
+	fi
+    echo
+    echo "Available Modules:"
+
+    modules=$(ls ${MOD_PATH})
+    for module in $modules; do
+        echo "  - $module"
+    done
+
+    echo
+    echo "run '$0 <module> help' to get more information about a specific module and its commands"
+    echo
+fi
+
